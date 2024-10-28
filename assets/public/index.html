@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Новостной портал</title>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--primary-color: #2c3e50;
+			--secondary-color: #3498db;
+			--accent-color: #e74c3c;
+			--background-color: #ecf0f1;
+			--text-color: #34495e;
+		}
+		
+		body {
+			font-family: 'Roboto', sans-serif;
+			line-height: 1.6;
+			margin: 0;
+			padding: 0;
+			background: linear-gradient(135deg, #3498db, #8e44ad);
+			color: var(--text-color);
+			min-height: 100vh;
+		}
+		
+		header {
+			background-color: rgba(44, 62, 80, 0.8);
+			color: #fff;
+			padding: 0;
+			box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+			width: 100%;
+			max-height: 5px;
+			overflow: hidden;
+			transition: max-height 0.3s ease-in-out;
+			z-index: 1000;
+		}
+		
+		header:hover {
+			max-height: 90px;
+		}
+		
+		nav {
+			height: 100%;
+			display: flex;
+			align-items: center;
+			padding: 0 1rem;
+		}
+		
+		nav ul {
+			list-style-type: none;
+			padding: 0;
+			margin: 0;
+			display: flex;
+			justify-content: space-around;
+			width: 100%;
+		}
+		
+		nav ul li a {
+			color: #cacaca; 
+			text-decoration: none;
+			font-weight: 400;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+			transition: all 0.3s ease;
+			font-size: 14px;
+			padding: 10px 10px;
+			display: inline-block;
+		}
+		
+		nav ul li a:hover {
+			color: var(--secondary-color);
+			transform: translateY(-2px);
+		}
+		
+		main {
+			padding: 20px 40px 40px;
+			max-width: 1200px;
+			margin: 0 auto;
+			display: grid;
+			grid-template-columns: 1fr;
+			gap: 40px;
+			transition: margin-top 0.3s ease-in-out;
+		}
+		
+		header:hover + main {
+			margin-top: 50px;
+		}
+		
+		h1, h2, h3 {
+			color: var(--primary-color);
+			margin-bottom: 20px;
+		}
+		
+		article, li {
+			background-color: rgba(255, 255, 255, 0.9);
+			margin-bottom: 30px;
+			padding: 25px;
+			border-radius: 10px;
+			box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+			transition: all 0.3s ease;
+		}
+		
+		article:hover, li:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+		}
+		
+		a {
+			color: var(--secondary-color);
+			text-decoration: none;
+			font-weight: 700;
+			transition: color 0.3s ease;
+		}
+		
+		a:hover {
+			color: var(--accent-color);
+		}
+		
+		#главные-новости {
+			grid-column: 1 / -1;
+		}
+		
+		#последние-новости ul {
+			list-style-type: none;
+			padding: 0;
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 20px;
+		}
+		
+		@keyframes fadeIn {
+			from { opacity: 0; transform: translateY(20px); }
+			to { opacity: 1; transform: translateY(0); }
+		}
+		
+		#главные-новости, #последние-новости {
+			animation: fadeIn 1s ease-out;
+		}
+		
+		@media (max-width: 768px) {
+			#последние-новости ul {
+				grid-template-columns: 1fr;
+			}
+			
+			nav ul li a {
+				font-size: 12px;
+				padding: 8px 10px;
+			}
+			
+			header:hover {
+				max-height: 80px;
+			}
+			
+			header:hover + main {
+				margin-top: 40px;
+			}
+		}
+
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .auth-form {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 350px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .auth-form:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .auth-form h2 {
+            margin-bottom: 25px;
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 28px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .auth-form input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: none;
+            border-bottom: 2px solid #ddd;
+            background-color: transparent;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .auth-form input:focus {
+            border-bottom-color: var(--secondary-color);
+            outline: none;
+        }
+
+        .auth-form button {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--secondary-color);
+            border: none;
+            border-radius: 30px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .auth-form button:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        #последние-новости, #главные-новости {
+            display: none;
+        }
+
+        .authenticated #последние-новости,
+        .authenticated #главные-новости {
+            display: block;
+        }
+
+        .logout-button {
+            display: none;
+            background-color: var(--accent-color);
+            border: none;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 10px 20px;
+            border-radius: 20px;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+        }
+
+        .logout-button:hover {
+            background-color: #c0392b;
+        }
+
+        .authenticated .logout-button {
+            display: inline-block;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .register-link a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .register-link a:hover {
+            color: var(--accent-color);
+            text-decoration: underline;
+        }
+
+        #register-form {
+            display: none;
+        }
+
+        .form-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .form-switch:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .nav-buttons {
+            display: none;
+            justify-content: center;
+            padding: 20px 0;
+        }
+
+        .authenticated .nav-buttons {
+            display: flex;
+        }
+
+        .nav-buttons a {
+            margin: 0 10px;
+            padding: 10px 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border-radius: 20px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-buttons a:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Стили для формы добавления поста */
+        #add-post-form {
+            display: none; /* Скрыта по умолчанию */
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            width: 500px;
+            margin: 20px auto;
+        }
+
+        #add-post-form h2 {
+            margin-bottom: 15px;
+            text-align: center;
+            color: var(--primary-color);
+        }
+
+        #add-post-form input,
+        #add-post-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        #add-post-form button {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--secondary-color);
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #add-post-form button:hover {
+            background-color: var(--accent-color);
+        }
+
+        /* Отображение формы добавления поста при аутентификации */
+        .authenticated #add-post-form {
+            display: block;
+        }
+	</style>
+</head>
+<body>
+	<!-- <header>
+		<nav>
+			<ul>
+				<li><a href="#главная">Главная</a></li>
+				<li><a href="#политика">Политика</a></li>
+				<li><a href="#экономика">Экономика</a></li>
+				<li><a href="#спорт">Спорт</a></li>
+				<li><a href="#культура">Культура</a></li>
+			</ul>
+		</nav>
+	</header> -->
+
+	<main>
+        <button class="logout-button" id="logout-button">Выйти</button>
+        <div class="nav-buttons">
+            <a href="#главная">Главная</a>
+            <a href="#политика">Политика</a>
+            <a href="#экономика">Экономика</a>
+            <a href="#спорт">Спорт</a>
+            <a href="#культура">Культура</a>
+        </div>
+
+        <section id="auth">
+            <div class="auth-container">
+                <div class="auth-form" id="login-form">
+                    <h2>Вход</h2>
+                    <input type="email" id="login-email" placeholder="Email" required>
+                    <input type="password" id="login-password" placeholder="Пароль" required>
+                    <button id="login-button">Войти</button>
+                    <div class="register-link">
+                        <a href="#" id="show-register">Нет аккаунта? Зарегистрируйтесь</a>
+                    </div>
+                </div>
+                <div class="auth-form" id="register-form">
+                    <h2>Регистрация</h2>
+                    <input type="text" id="register-login" placeholder="Логин" required>
+                    <input type="email" id="register-email" placeholder="Email" required>
+                    <input type="password" id="register-password" placeholder="Пароль" required>
+                    <button id="register-button">Зарегистрироваться</button>
+                    <div class="register-link">
+                        <a href="#" id="show-login">Уже есть аккаунт? Войдите</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+		<section id="главные-новости">
+			<h1>Главные новости</h1>
+			<article>
+				<h2>Заголовок главной новости</h2>
+				<p>Краткое описание главной новости...</p>
+				<a href="#">Читать далее &rarr;</a>
+			</article>
+		</section>
+
+		<section id="последние-новости">
+			<h2>Последние новости</h2>
+			<ul>
+				<li class="loader">Загрузка новостей...</li>
+			</ul>
+		</section>
+
+        <!-- Форма добавления поста -->
+        <section id="add-post">
+            <div id="add-post-form">
+                <h2>Добавить новый пост</h2>
+                <input type="text" id="post-title" placeholder="Заголовок" required>
+                <textarea id="post-text" placeholder="Текст поста" rows="5" required></textarea>
+                <button id="add-post-button">Опубликовать</button>
+            </div>
+        </section>
+	</main>
+	<script src="/assets/src/main.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			const showRegisterLink = document.getElementById('show-register');
+			const showLoginLink = document.getElementById('show-login');
+			const loginForm = document.getElementById('login-form');
+			const registerForm = document.getElementById('register-form');
+			const formSwitch = document.getElementById('form-switch');
+
+			function toggleForms() {
+				loginForm.style.display = loginForm.style.display === 'none' ? 'block' : 'none';
+				registerForm.style.display = registerForm.style.display === 'none' ? 'block' : 'none';
+			}
+
+			showRegisterLink.addEventListener('click', (e) => {
+				e.preventDefault();
+				loginForm.style.display = 'none';
+				registerForm.style.display = 'block';
+			});
+
+			showLoginLink.addEventListener('click', (e) => {
+				e.preventDefault();
+				registerForm.style.display = 'none';
+				loginForm.style.display = 'block';
+			});
+
+			// formSwitch.addEventListener('click', toggleForms);
+		});
+	</script>
+</body>
+</html>
